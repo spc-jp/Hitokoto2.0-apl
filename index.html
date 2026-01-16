@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="ja" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Hitokoto 2.5 | 迷えるチームの処方箋</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans JP"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              300: '#c4b5fd',
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+              950: '#2e1065',
+            },
+            accent: {
+              400: '#e879f9',
+              500: '#d946ef',
+            },
+            dark: {
+              bg: '#0f172a',
+              card: '#1e293b',
+            }
+          },
+          animation: {
+            'blob': 'blob 7s infinite',
+            'fade-in': 'fadeIn 0.5s ease-out forwards',
+            'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'pop': 'pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            'shine': 'shine 1s infinite',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pop: {
+              '0%': { opacity: '0', transform: 'scale(0.8)' },
+              '100%': { opacity: '1', transform: 'scale(1)' },
+            },
+            shine: {
+              '100%': { transform: 'translateX(100%) skewX(12deg)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    .glass {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .dark .glass {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .share-card-bg {
+      background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
+    }
+  </style>
+</head>
+<!-- 変更点: min-h-screen を h-screen に変更し、w-fullを追加 -->
+<body class="bg-slate-50 text-slate-800 dark:bg-dark-bg dark:text-slate-100 font-sans h-screen w-full flex flex-col transition-colors duration-300 overflow-hidden">
+
+  <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute top-0 left-0 w-full h-full bg-slate-50 dark:bg-dark-bg transition-colors duration-300"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-300/30 dark:bg-brand-900/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob"></div>
+    <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-accent-400/30 dark:bg-accent-500/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+  </div>
+
+  <header class="fixed top-0 w-full z-40 glass shadow-sm transition-colors duration-300">
+    <div class="max-w-3xl mx-auto px-4 h-16 flex items-center justify-between">
+      <button onclick="switchTab('home')" class="flex items-center gap-2 hover:opacity-70 transition-opacity text-left group">
+        <div class="bg-gradient-to-br from-brand-500 to-accent-500 text-white p-2 rounded-xl shadow-lg shadow-brand-500/20 group-active:scale-95 transition-transform">
+          <i data-lucide="wand-2" class="w-5 h-5"></i>
+        </div>
+        <h1 class="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-accent-500 dark:from-brand-400 dark:to-accent-400">
+          Hitokoto <span class="text-xs font-medium text-slate-400 dark:text-slate-500 align-top">2.5</span>
+        </h1>
+      </button>
+      
+      <div class="flex items-center gap-2">
+        <button onclick="openGuide()" class="p-2.5 rounded-full text-brand-600 bg-brand-50 hover:bg-brand-100 dark:bg-brand-900/30 dark:text-brand-300 dark:hover:bg-brand-900/50 transition">
+          <i data-lucide="book-open" class="w-5 h-5"></i>
+        </button>
+        <button onclick="toggleTheme()" class="p-2.5 rounded-full text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition">
+          <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+          <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow pt-20 pb-24 overflow-y-auto overflow-x-hidden scroll-smooth" id="mainContainer">
+    <div class="max-w-md mx-auto px-4 space-y-8 min-h-[80vh]">
+      
+      <section id="tab-home" class="tab-content block space-y-6 animate-fade-in">
+        
+        <div class="text-center space-y-2 py-4">
+          <h2 class="text-2xl font-bold text-slate-800 dark:text-white">チームの迷いを、<br><span class="text-brand-600 dark:text-brand-400">魔法の力</span>で突破する。</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">叱りたいわけじゃない。ただ、前に進んでほしいだけ。</p>
+        </div>
+
+        <div class="glass rounded-3xl p-6 shadow-xl shadow-brand-900/5 dark:shadow-none relative overflow-hidden border-brand-100 dark:border-brand-900/50">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-brand-500/10 to-transparent rounded-bl-full -mr-8 -mt-8 pointer-events-none"></div>
+
+          <div class="space-y-6 relative z-10">
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300">
+                <i data-lucide="user" class="w-4 h-4 text-brand-500"></i> 対象（ポジション）
+              </label>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="cursor-pointer">
+                  <input type="radio" name="level" value="new" class="peer hidden" checked>
+                  <div class="py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 text-center text-sm font-medium text-slate-600 dark:text-slate-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 dark:peer-checked:bg-brand-900/30 peer-checked:text-brand-600 dark:peer-checked:text-brand-300 transition-all shadow-sm">
+                    🐣 新人・若手
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="level" value="mid" class="peer hidden">
+                  <div class="py-3 px-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 text-center text-sm font-medium text-slate-600 dark:text-slate-400 peer-checked:border-brand-500 peer-checked:bg-brand-50 dark:peer-checked:bg-brand-900/30 peer-checked:text-brand-600 dark:peer-checked:text-brand-300 transition-all shadow-sm">
+                    🦅 中堅・リーダー
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-slate-300">
+                <i data-lucide="activity" class="w-4 h-4 text-brand-500"></i> 気になる症状
+              </label>
+              <div class="relative">
+                <select id="behavior" class="w-full bg-white/70 dark:bg-slate-800/70 border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-transparent block p-4 appearance-none transition-all font-medium cursor-pointer">
+                  <option value="" disabled selected>症状を選択してください...</option>
+                  <optgroup label="行動・姿勢">
+                    <option value="task-only">言われたことしかやらない</option>
+                    <option value="no-decision">自分で決められない</option>
+                    <option value="solo-play">一人で抱え込む</option>
+                    <option value="status-quo">変化を嫌う・現状維持</option>
+                  </optgroup>
+                  <optgroup label="コミュニケーション">
+                    <option value="no-consult">相談なしで暴走する</option>
+                    <option value="silent">指摘すると黙り込む</option>
+                    <option value="late-report">悪い報告を隠す・遅れる</option>
+                    <option value="critic">口だけで動かない（評論家）</option>
+                  </optgroup>
+                  <optgroup label="マインド">
+                    <option value="busy-word">「忙しい」と言い訳する</option>
+                    <option value="perfectionist">完璧主義で遅い</option>
+                    <option value="chicken-heart">失敗を恐れて行動しない（チキンハート）</option>
+                  </optgroup>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                  <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 ml-2 leading-tight">
+                今いちばん気になっている“行動”を一つ選んでください。正解はありません。
+              </p>
+            </div>
+
+            <div class="pt-2">
+              <p class="text-center text-xs text-brand-500/80 dark:text-brand-400/80 font-bold mb-2">
+                まずは症状を選ぶだけで大丈夫です
+              </p>
+              <button onclick="runDiagnosis()" id="diagnoseBtn" class="w-full bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-brand-500/30 transform transition active:scale-95 flex items-center justify-center gap-2 group relative overflow-hidden">
+                <span class="absolute inset-0 w-full h-full bg-white/20 translate-x-[-100%] skew-x-12 group-hover:animate-[shine_1s_infinite]"></span>
+                <i data-lucide="sparkles" class="w-5 h-5 animate-pulse"></i>
+                <span>処方箋を作成（Hitokoto）</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="homeHistoryTeaser" class="hidden animate-fade-in">
+          <div class="flex items-center justify-between px-2 mb-2">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">最近の履歴</h3>
+            <button onclick="switchTab('history')" class="text-xs text-brand-500 font-medium hover:underline">すべて見る</button>
+          </div>
+          <div id="teaserList" class="space-y-2"></div>
+        </div>
+
+        <div class="py-8 px-4 text-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500 w-full max-w-xs mx-auto">
+          <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">このアプリについて</h4>
+          <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Hitokotoは、正解を出すアプリではありません。<br>
+            今の関係性で、いちばん摩擦の少ない<br>“次の一言”を見つけるための相棒です。
+          </p>
+        </div>
+
+      </section>
+
+      <section id="tab-history" class="tab-content hidden space-y-4 animate-slide-up">
+        <h2 class="text-2xl font-bold px-2 dark:text-white">診断履歴</h2>
+        <div id="historyList" class="space-y-3 pb-20"></div>
+      </section>
+
+      <section id="tab-favorites" class="tab-content hidden space-y-4 animate-slide-up">
+        <h2 class="text-2xl font-bold px-2 dark:text-white">お気に入り</h2>
+        <div id="favList" class="space-y-3 pb-20"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="guideModal" class="fixed inset-0 z-[60] hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" id="guideBackdrop"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" id="guidePanel">
+        <div class="bg-brand-50 dark:bg-brand-900/30 p-6 text-center border-b border-brand-100 dark:border-brand-800">
+          <div class="w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm">
+            <span class="text-2xl">🔰</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-800 dark:text-white">ようこそ Hitokoto へ</h3>
+          <p class="text-xs text-brand-600 dark:text-brand-300 mt-1 font-medium">秘密のあんちょこツール 🤫</p>
+        </div>
+        
+        <div class="p-6 space-y-6">
+          <div class="space-y-2">
+            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-center">
+              このアプリは、部下への接し方に迷ったとき、あなたの代わりに<b class="text-brand-600 dark:text-brand-400">「今、効く一言」</b>を提案するお助けアプリです。
+            </p>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 font-bold text-sm">1</div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-800 dark:text-white">相手を選ぶ 🐣</h4>
+                <p class="text-xs text-slate-500 mt-0.5">新人さん？ それとも中堅？</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 font-bold text-sm">2</div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-800 dark:text-white">悩みを選ぶ 🤔</h4>
+                <p class="text-xs text-slate-500 mt-0.5">「指示待ち」「抱え込み」など...</p>
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 font-bold text-sm">3</div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-800 dark:text-white">処方箋ゲット ✨</h4>
+                <p class="text-xs text-slate-500 mt-0.5">魔法の言葉で背中を押そう！</p>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="closeGuide()" id="closeGuideBtn" class="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold py-3 rounded-xl hover:opacity-90 transition">
+            わかった！はじめる
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0" onclick="closeModal()"></div>
+    <div class="absolute inset-x-0 bottom-0 top-10 md:top-20 md:inset-x-auto md:w-[500px] md:mx-auto bg-slate-50 dark:bg-slate-900 rounded-t-3xl md:rounded-3xl flex flex-col shadow-2xl transform translate-y-full transition-transform duration-300 ease-out" id="resultPanel">
+      
+      <div class="shrink-0 p-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+        <div class="w-10"></div>
+        <div class="w-12 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full"></div>
+        <button onclick="closeModal()" id="closeResultBtn" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="flex-grow overflow-y-auto p-6 space-y-6">
+        <div id="shareCard" class="relative overflow-hidden rounded-2xl shadow-xl shadow-brand-500/20 group select-none">
+          <div class="absolute inset-0 share-card-bg"></div>
+          <div class="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+          <div class="absolute bottom-0 left-0 w-32 h-32 bg-black/10 rounded-full blur-xl translate-y-1/2 -translate-x-1/2"></div>
+          <div class="relative z-10 p-6 text-white text-center flex flex-col items-center justify-center min-h-[300px]">
+            <div class="mb-4">
+              <span id="resBadge" class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold border border-white/20 tracking-wider">TYPE</span>
+            </div>
+            <i data-lucide="quote" class="w-6 h-6 text-white/50 mb-2"></i>
+            <h2 id="resProverb" class="text-2xl md:text-3xl font-black leading-tight mb-6 drop-shadow-md text-white"></h2>
+            <div class="w-12 h-0.5 bg-white/30 rounded-full mb-6"></div>
+            <p class="text-xs font-medium opacity-80 uppercase tracking-widest">Hitokoto 2.5</p>
+          </div>
+        </div>
+
+        <div class="text-center space-y-3 py-2 border-b border-slate-100 dark:border-slate-800/50 pb-5">
+          <p class="text-sm font-bold text-slate-700 dark:text-slate-200">この一言、今日使えそうですか？</p>
+          <div class="flex justify-center gap-4">
+            <button onclick="toggleCurrentFav()" id="quickYesBtn" class="px-6 py-2 bg-brand-100 text-brand-700 dark:bg-brand-900/50 dark:text-brand-300 rounded-full text-xs font-bold hover:bg-brand-200 transition">YES</button>
+            <button onclick="closeModal()" id="quickNoBtn" class="px-6 py-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 text-xs font-bold transition">あとで</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="toggleCurrentFav()" id="saveFavBtn" class="flex items-center justify-center gap-2 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition">
+            <i data-lucide="bookmark" class="w-4 h-4"></i>
+            <span>保存</span>
+          </button>
+          <button onclick="shareResult()" id="shareBtn" class="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:opacity-90 transition">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <span>シェア</span>
+          </button>
+        </div>
+
+        <div class="space-y-4 animate-fade-in" style="animation-delay: 0.1s;">
+          <div class="bg-white dark:bg-dark-card p-5 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm">
+            <h3 class="flex items-center gap-2 font-bold text-slate-800 dark:text-white mb-3">
+              <i data-lucide="microscope" class="w-4 h-4 text-brand-500"></i>
+              処方箋の解説
+            </h3>
+            <p id="resExplain" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+          </div>
+
+          <div class="bg-brand-50 dark:bg-brand-900/20 p-5 rounded-2xl border border-brand-100 dark:border-brand-800">
+            <h3 class="flex items-center gap-2 font-bold text-brand-700 dark:text-brand-300 mb-3">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              魔法の一言（Action）
+            </h3>
+            <ul id="resMagic" class="space-y-3"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新規追加: 削除確認用モーダル (alert/confirm回避策) -->
+  <div id="confirmModal" class="fixed inset-0 z-[70] hidden">
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeConfirmModal()"></div>
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-xs bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 text-center space-y-4">
+      <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center mx-auto">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800 dark:text-white text-lg">本当に削除しますか？</h3>
+        <p id="confirmMessage" class="text-sm text-slate-500 dark:text-slate-400 mt-1">この操作は元に戻せません。</p>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="closeConfirmModal()" class="py-2.5 rounded-xl font-bold text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-700 transition">
+          キャンセル
+        </button>
+        <button onclick="executeDelete()" class="py-2.5 rounded-xl font-bold bg-red-500 text-white hover:bg-red-600 shadow-lg shadow-red-500/30 transition">
+          削除する
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="fixed bottom-0 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 pb-safe z-40">
+    <div class="max-w-md mx-auto grid grid-cols-3 h-16">
+      <button onclick="switchTab('home')" class="nav-btn group flex flex-col items-center justify-center gap-1 text-brand-600 dark:text-brand-400" data-target="home">
+        <i data-lucide="sparkles" class="w-6 h-6 group-active:scale-90 transition-transform"></i>
+        <span class="text-[10px] font-bold">診断</span>
+      </button>
+      <button onclick="switchTab('history')" class="nav-btn group flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300" data-target="history">
+        <i data-lucide="history" class="w-6 h-6 group-active:scale-90 transition-transform"></i>
+        <span class="text-[10px] font-bold">履歴</span>
+      </button>
+      <button onclick="switchTab('favorites')" class="nav-btn group flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300" data-target="favorites">
+        <i data-lucide="bookmark" class="w-6 h-6 group-active:scale-90 transition-transform"></i>
+        <span class="text-[10px] font-bold">保存済</span>
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    // --- APP DATA & LOGIC ---
+    
+    // データ定義
+    const cases = [
+      { 
+        id: "task-only", 
+        title: "指示待ちロボット型", 
+        badge: "CASE: 指示待ち", 
+        proverb: "仕事を「終わらせる」のは作業者。「広げて返す」のがプロ。", 
+        explain: "言われたことだけやるのは安心感がありますが、成長が止まります。「＋αの工夫」を評価軸に加え、意識をズラしましょう。", 
+        magic: [
+          "「この仕事、言われた範囲に“あなたなりの工夫”を一つ足してみて？」", 
+          "「完了報告じゃなくて、“次に何をやるべきか”の提案までがセットだよ。」",
+          "「もし君がこのプロジェクトのリーダーなら、次にどう動く？」",
+          "「100点じゃなくていいから、“120点の仕事”にするなら何を加える？」",
+          "「作業が終わったね。じゃあ次は“価値”を生むフェーズに入ろうか。」"
+        ] 
+      },
+      { 
+        id: "no-decision", 
+        title: "判断丸投げ型", 
+        badge: "CASE: 判断丸投げ", 
+        proverb: "判断を預けるクセは、信頼とチャンスも手放している。", 
+        explain: "失敗を恐れて「どっちがいいですか？」と聞きます。正解を教えるのではなく、「君の推しは？」と意思決定の練習をさせましょう。", 
+        magic: [
+          "「まず、あなたの“ベスト案”を1つ決めてから相談してみよう。」", 
+          "「今回は君の判断で決めていいよ。責任は私が持つから。」",
+          "「A案とB案、それぞれの“最悪のケース”を想定してみた？」",
+          "「“どっちでもいい”状況なら、君がワクワクする方を選んで。」",
+          "「失敗しても、それは“ナイスな実験データ”だから大丈夫だよ。」"
+        ] 
+      },
+      { 
+        id: "solo-play", 
+        title: "抱え込みソロプレイヤー", 
+        badge: "CASE: 抱え込み", 
+        proverb: "中堅の仕事は、自分で動くことより、人を動かす仕組みを作ること。", 
+        explain: "真面目な人ほど一人で背負います。「頼ることは悪ではなく、チームの速度を上げる戦術だ」と伝えましょう。", 
+        magic: [
+          "「君一人でやる前提じゃなく、“誰を使えば最速か”で考えてみて。」", 
+          "「後輩に任せられる部分を切り出すのも、大事な仕事だよ。」",
+          "「“自分がいないと回らない”は、組織にとってのリスクなんだ。」",
+          "「助けを求めることは、弱さじゃなくて“状況判断能力”だよ。」",
+          "「君の時間を、もっと“未来をつくる仕事”に使ってほしいんだ。」"
+        ] 
+      },
+      { 
+        id: "status-quo", 
+        title: "現状維持バイアス型", 
+        badge: "CASE: 現状維持", 
+        proverb: "「現状維持」は、下りのエスカレーターに乗っているのと同じ。", 
+        explain: "変化は痛みを伴います。「全て変える」のではなく「実験的に少し変える」とハードルを下げて提案させましょう。", 
+        magic: [
+          "「『今まで通り』を一度忘れて、ゼロベースならどうする？」", 
+          "「失敗しても戻せるから、1週間だけこの新方式を試してみない？」",
+          "「もしコストが無限にあったら、どう変えたい？」",
+          "「変わらないリスクと、変わるリスク。どっちが大きいと思う？」",
+          "「完璧な変更じゃなくていい。“小さな実験”を始めよう。」"
+        ] 
+      },
+      { 
+        id: "no-consult", 
+        title: "独走機関車型", 
+        badge: "CASE: ホウレンソウ不足", 
+        proverb: "相談は弱さではなく、ズレを補正する「測量」だ。", 
+        explain: "相談しないのは「邪魔したくない」か「過信」です。こまめな相談が手戻りを防ぐと伝えましょう。", 
+        magic: [
+          "「完璧な状態でなくていい。5分でいいから方向性だけ合わせよう。」", 
+          "「完成品より、作成途中の『骨組み』を見せてほしいな。」",
+          "「迷ってなくても、節目で声をかけてくれるのが一番安心するよ。」",
+          "「君の時間を無駄にしたくないから、早めにチェックさせて。」",
+          "「“報告”じゃなくて“作戦会議”だと思って、気軽に話しかけて。」"
+        ] 
+      },
+      { 
+        id: "silent", 
+        title: "フリーズ型（沈黙）", 
+        badge: "CASE: 指摘でフリーズ", 
+        proverb: "フィードバックは攻撃じゃない。一緒にレベルを上げる攻略本だ。", 
+        explain: "黙るのは脳が防御態勢に入っているから。敵ではなく味方であることを強調し、心理的安全性を確保しましょう。", 
+        magic: [
+          "「責めているわけじゃないよ。もっと良くするための作戦会議だ。」", 
+          "「まず、君が今どう感じたか、一言だけ教えてくれる？」",
+          "「何が原因かより、“これからどうするか”にフォーカスしよう。」",
+          "「言葉にならなくてもいいから、頷くだけでもしてくれる？」",
+          "「僕も味方だから、一緒に解決策を探そう。」"
+        ] 
+      },
+      { 
+        id: "late-report", 
+        title: "バッドニュース隠蔽型", 
+        badge: "CASE: 報告遅れ", 
+        proverb: "報告が早い人は、仕事の「失敗」ではなく「選択肢」を増やしている。", 
+        explain: "「早めのバッドニュースは評価する」というルールを明確にしないと改善しません。", 
+        magic: [
+          "「解決してなくていい。状況だけ最速で教えてくれれば手は打てる。」", 
+          "「困った時は、早く言った人の方が得をするルールだよ。」",
+          "「怒らないから、事実だけを淡々と教えてほしい。」",
+          "「火種は小さいうちに消した方が、君も楽になるよ。」",
+          "「ギリギリまで頑張るより、早めにアラートを上げるのがプロだ。」"
+        ] 
+      },
+      { 
+        id: "critic", 
+        title: "口だけ評論家型", 
+        badge: "CASE: 評論家気質", 
+        proverb: "評論家は客席、プレイヤーは舞台。君はどっちに立ちたい？", 
+        explain: "批判は簡単ですが価値はありません。「代案なき批判は禁止」とし、実行する側に引きずり出しましょう。", 
+        magic: [
+          "「鋭い視点だね。で、それを解決する『最初の一歩』は何だと思う？」", 
+          "「その課題、君がリーダーなら誰を巻き込んでどう解決する？」",
+          "「ダメな理由はわかった。じゃあ『どうすればできるか』を話そう。」",
+          "「言うのは簡単だ。じゃあ、誰がやる？ 君がやる？」",
+          "「批評家としてではなく、当事者としての意見を聞かせて。」"
+        ] 
+      },
+      { 
+        id: "busy-word", 
+        title: "「忙しい」多忙アピール型", 
+        badge: "CASE: 忙しいが口癖", 
+        proverb: "「忙しい」と言う人は時間に追われる側。優先順位を決める人が時間を支配する。", 
+        explain: "タスクを可視化させ、捨てる勇気を持たせることが上司の役割です。", 
+        magic: [
+          "「今日やること全部書き出して。その中で『本当に今やるべき3つ』はどれ？」", 
+          "「『やらないこと』を決めるのが戦略だよ。どれを捨てようか？」",
+          "「忙しいのは頑張っている証拠だけど、成果に繋がっているかな？」",
+          "「60点の出来でいいから、今日中に一度見せて。」",
+          "「深呼吸しよう。一番のボトルネックはどこだと思う？」"
+        ] 
+      },
+      { 
+        id: "perfectionist", 
+        title: "完璧主義スロー型", 
+        badge: "CASE: 完璧主義", 
+        proverb: "70点のスピード提出は、100点の遅刻よりも価値がある。", 
+        explain: "ビジネスにおける「品質」には「納期」も含まれることを徹底的に刷り込みます。", 
+        magic: [
+          "「まずは30点の出来でいい。骨組みだけすぐ見せて。」", 
+          "「『完璧』を目指すより『最速』で出すなら、どこを削る？」",
+          "「この仕事の合格ラインはここ。これ以上時間をかけるのは過剰品質だよ。」",
+          "「走りながら考えよう。修正は後からいくらでもできる。」",
+          "「時間をかけることが目的になってない？ ゴールを見直そう。」"
+        ] 
+      },
+      { 
+        id: "chicken-heart", 
+        title: "チキンハート（失敗恐怖）型", 
+        badge: "CASE: 失敗恐怖症", 
+        proverb: "失敗は「行き止まり」ではなく、正解への「通過点」だ。", 
+        explain: "失敗＝悪と思い込み、一歩が踏み出せません。「結果」ではなく「挑戦した事実」を評価し、心理的安全性を担保することが特効薬です。", 
+        magic: [
+          "「失敗しても、それは『うまくいかない方法』を発見した成功だよ。」", 
+          "「もし失敗したら、一緒に謝りに行くから大丈夫。」",
+          "「100点を目指さなくていい。まずは60点で『出したこと』を褒めたい。」",
+          "「この件で一番のリスクは、失敗することじゃなくて『何も動かないこと』だね。」",
+          "「『ナイストライ！』失敗は大歓迎だよ。」"
+        ] 
+      }
+    ];
+
+    // 状態管理
+    let state = {
+        history: JSON.parse(localStorage.getItem('hitokoto_history')) || [],
+        favorites: JSON.parse(localStorage.getItem('hitokoto_favs')) || [],
+        currentResult: null
+    };
+    
+    // 削除処理用の一時変数
+    let pendingDelete = null; // { type: 'history' | 'fav' | 'all_history' | 'all_fav', index: number | null }
+
+    // --- GLOBAL FUNCTIONS ---
+
+    window.toggleTheme = function() {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.theme = isDark ? 'dark' : 'light';
+    };
+
+    window.openGuide = function() {
+        const modal = document.getElementById('guideModal');
+        const panel = document.getElementById('guidePanel');
+        if(modal && panel) {
+          modal.classList.remove('hidden');
+          panel.classList.remove('scale-95');
+          panel.classList.add('scale-100');
+        }
+    };
+
+    window.closeGuide = function() {
+        const modal = document.getElementById('guideModal');
+        const panel = document.getElementById('guidePanel');
+        if(panel) {
+          panel.classList.remove('scale-100');
+          panel.classList.add('scale-95');
+          setTimeout(() => modal && modal.classList.add('hidden'), 200);
+        }
+    };
+
+    window.switchTab = function(targetId) {
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const tabs = document.querySelectorAll('.tab-content');
+        
+        navBtns.forEach(btn => {
+            if(btn.dataset.target === targetId) {
+                btn.classList.add('text-brand-600', 'dark:text-brand-400');
+                btn.classList.remove('text-slate-400');
+            } else {
+                btn.classList.remove('text-brand-600', 'dark:text-brand-400');
+                btn.classList.add('text-slate-400');
+            }
+        });
+
+        tabs.forEach(tab => {
+            if(tab.id === `tab-${targetId}`) {
+                tab.classList.remove('hidden');
+                tab.classList.add('animate-fade-in');
+            } else {
+                tab.classList.add('hidden');
+                tab.classList.remove('animate-fade-in');
+            }
+        });
+
+        const mainContainer = document.getElementById('mainContainer');
+        if(mainContainer) {
+          mainContainer.scrollTop = 0;
+        }
+    };
+
+    window.runDiagnosis = function() {
+        const qBehavior = document.getElementById('behavior');
+        const behaviorVal = qBehavior ? qBehavior.value : null;
+
+        if (!behaviorVal || behaviorVal === "") {
+            alert("症状を選択してください");
+            if(qBehavior) qBehavior.focus();
+            return;
+        }
+
+        let levelVal = 'new';
+        const levels = document.getElementsByName('level');
+        levels.forEach(r => { if(r.checked) levelVal = r.value; });
+
+        const result = cases.find(c => c.id === behaviorVal);
+        if (!result) return;
+
+        state.currentResult = { ...result, level: levelVal, timestamp: new Date().toISOString() };
+        
+        // 履歴追加処理
+        window.addToHistory(state.currentResult);
+        
+        // 結果表示処理
+        window.populateResult(state.currentResult);
+        window.openModal();
+    };
+
+    window.populateResult = function(data) {
+        if(document.getElementById('resBadge')) document.getElementById('resBadge').textContent = data.badge;
+        if(document.getElementById('resProverb')) document.getElementById('resProverb').textContent = data.proverb;
+        if(document.getElementById('resExplain')) document.getElementById('resExplain').textContent = data.explain;
+        
+        const magicList = document.getElementById('resMagic');
+        if(magicList) {
+          magicList.innerHTML = data.magic.map(m => `
+              <li class="flex items-start gap-3 bg-white dark:bg-slate-800 p-3 rounded-lg text-sm text-slate-700 dark:text-slate-300 shadow-sm">
+              <i data-lucide="check-circle" class="w-4 h-4 text-brand-500 shrink-0 mt-0.5"></i>
+              <span>${m}</span>
+              </li>
+          `).join('');
+        }
+        
+        // クイックアクションボタンのリセット
+        const quickYes = document.getElementById('quickYesBtn');
+        if(quickYes) {
+          quickYes.textContent = "YES";
+          quickYes.classList.remove("bg-brand-600", "text-white");
+          quickYes.classList.add("bg-brand-100", "text-brand-700");
+        }
+        
+        if(window.lucide) lucide.createIcons();
+        window.updateFavBtnState();
+    };
+
+    window.openModal = function() {
+        const modal = document.getElementById('resultModal');
+        const backdrop = document.getElementById('resultBackdrop');
+        const panel = document.getElementById('resultPanel');
+        
+        if(modal) {
+          modal.classList.remove('hidden');
+          setTimeout(() => { 
+            if(backdrop) backdrop.classList.remove('opacity-0'); 
+            if(panel) panel.classList.remove('translate-y-full'); 
+          }, 10);
+        }
+    };
+
+    window.closeModal = function() {
+        const modal = document.getElementById('resultModal');
+        const backdrop = document.getElementById('resultBackdrop');
+        const panel = document.getElementById('resultPanel');
+        
+        if(backdrop) backdrop.classList.add('opacity-0'); 
+        if(panel) panel.classList.add('translate-y-full');
+        setTimeout(() => modal && modal.classList.add('hidden'), 300);
+    };
+
+    window.addToHistory = function(item) {
+        const existingIdx = state.history.findIndex(h => h.id === item.id && h.level === item.level);
+        if (existingIdx !== -1) {
+             state.history.splice(existingIdx, 1);
+        }
+        
+        state.history.unshift(item);
+        if (state.history.length > 20) state.history.pop();
+        
+        try {
+            localStorage.setItem('hitokoto_history', JSON.stringify(state.history));
+        } catch(e) { console.error('Storage full', e); }
+        
+        window.renderHistory();
+    };
+
+    window.renderHistory = function() {
+        const historyList = document.getElementById('historyList');
+        const teaserList = document.getElementById('teaserList');
+        const homeHistoryTeaser = document.getElementById('homeHistoryTeaser');
+
+        let html = '';
+        if (state.history.length > 0) {
+            html = state.history.map((item, idx) => window.createItemHTML(item, idx, 'history')).join('');
+            html += `
+            <div class="pt-4 pb-2 flex justify-center">
+              <button onclick="window.confirmDelete('all_history')" class="text-xs font-bold text-red-400 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 transition flex items-center gap-1 py-2 px-4 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                <i data-lucide="trash-2" class="w-3 h-3"></i>
+                履歴をすべて削除
+              </button>
+            </div>
+          `;
+        } else {
+            html = '<div class="text-center py-10 opacity-50"><p class="text-sm">履歴なし</p></div>';
+        }
+
+        if(historyList) historyList.innerHTML = html;
+        
+        if(homeHistoryTeaser && teaserList) {
+            if(state.history.length > 0) {
+                homeHistoryTeaser.classList.remove('hidden');
+                teaserList.innerHTML = state.history.slice(0, 3).map((item, idx) => window.createItemHTML(item, idx, 'teaser')).join('');
+            } else {
+                homeHistoryTeaser.classList.add('hidden');
+            }
+        }
+        
+        if(window.lucide) lucide.createIcons();
+    };
+
+    window.renderFavorites = function() {
+        const favList = document.getElementById('favList');
+        let html = '';
+        
+        if (state.favorites.length > 0) {
+            html = state.favorites.map((item, idx) => window.createItemHTML(item, idx, 'fav')).join('');
+            html += `
+            <div class="pt-4 pb-2 flex justify-center">
+              <button onclick="window.confirmDelete('all_fav')" class="text-xs font-bold text-red-400 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 transition flex items-center gap-1 py-2 px-4 rounded hover:bg-red-50 dark:hover:bg-red-900/20">
+                <i data-lucide="trash-2" class="w-3 h-3"></i>
+                保存済をすべて削除
+              </button>
+            </div>
+          `;
+        } else {
+            html = '<div class="text-center py-10 opacity-50"><p class="text-sm">お気に入りなし</p></div>';
+        }
+        
+        if(favList) favList.innerHTML = html;
+        if(window.lucide) lucide.createIcons();
+    };
+
+    window.createItemHTML = function(item, idx, type) {
+        const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : 'Now';
+        const isTeaser = type === 'teaser';
+        
+        if (isTeaser) {
+            return `
+            <div onclick="window.openItem('${item.id}')" class="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer active:scale-[0.98] transition">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 font-bold text-xs">${item.title.substring(0,2)}</div>
+                    <div class="min-w-0"><div class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">${item.title}</div><div class="text-xs text-slate-400 truncate">${date}</div></div>
+                </div>
+            </div>`;
+        }
+
+        // ここを変更: 直接delete関数ではなく、確認モーダルを開く関数を呼ぶ
+        const delFn = type === 'history' ? `window.confirmDelete('history', ${idx})` : `window.confirmDelete('fav', ${idx})`;
+        
+        return `
+        <div class="group relative bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden transition-all">
+            <div onclick="window.openItem('${item.id}')" class="p-3 pr-14 flex items-center gap-3 cursor-pointer active:bg-slate-50 dark:active:bg-slate-700">
+                <div class="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0 font-bold text-xs">${item.title.substring(0,2)}</div>
+                <div class="min-w-0">
+                    <div class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate">${item.title}</div>
+                    <div class="text-xs text-slate-400 truncate">${date} ・ ${item.level === 'new' ? '新人' : '中堅'}</div>
+                </div>
+            </div>
+            <button onclick="${delFn}" class="absolute right-0 top-0 bottom-0 w-12 flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors z-10">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+        </div>`;
+    };
+
+    window.openItem = function(id) {
+        const item = cases.find(c => c.id === id);
+        if(item) {
+            state.currentResult = item;
+            window.populateResult(item);
+            window.openModal();
+        }
+    };
+
+    // --- 削除機能の実装 (confirm回避版) ---
+
+    window.confirmDelete = function(type, index = null) {
+        pendingDelete = { type, index };
+        const modal = document.getElementById('confirmModal');
+        const message = document.getElementById('confirmMessage');
+        
+        if (type === 'all_history') message.textContent = "診断履歴をすべて削除しますか？";
+        else if (type === 'all_fav') message.textContent = "お気に入りをすべて削除しますか？";
+        else message.textContent = "この項目を削除しますか？";
+
+        if(modal) {
+            modal.classList.remove('hidden');
+        }
+    }
+
+    window.closeConfirmModal = function() {
+        const modal = document.getElementById('confirmModal');
+        if(modal) modal.classList.add('hidden');
+        pendingDelete = null;
+    }
+
+    window.executeDelete = function() {
+        if(!pendingDelete) return;
+
+        if (pendingDelete.type === 'history' && pendingDelete.index !== null) {
+            state.history.splice(pendingDelete.index, 1);
+            localStorage.setItem('hitokoto_history', JSON.stringify(state.history));
+            window.renderHistory();
+        } 
+        else if (pendingDelete.type === 'fav' && pendingDelete.index !== null) {
+            state.favorites.splice(pendingDelete.index, 1);
+            localStorage.setItem('hitokoto_favs', JSON.stringify(state.favorites));
+            window.renderFavorites();
+            window.updateFavBtnState();
+        }
+        else if (pendingDelete.type === 'all_history') {
+            state.history = [];
+            localStorage.removeItem('hitokoto_history');
+            window.renderHistory();
+        }
+        else if (pendingDelete.type === 'all_fav') {
+            state.favorites = [];
+            localStorage.removeItem('hitokoto_favs');
+            window.renderFavorites();
+            window.updateFavBtnState();
+        }
+
+        window.closeConfirmModal();
+    }
+
+    window.toggleCurrentFav = function() {
+        if(!state.currentResult) return;
+        const idx = state.favorites.findIndex(f => f.id === state.currentResult.id);
+        
+        if (idx >= 0) {
+            state.favorites.splice(idx, 1);
+        } else {
+            state.favorites.unshift(state.currentResult);
+        }
+        
+        localStorage.setItem('hitokoto_favs', JSON.stringify(state.favorites));
+        window.updateFavBtnState();
+        window.renderFavorites();
+        
+        const saveFavBtn = document.getElementById('saveFavBtn');
+        const icon = saveFavBtn ? saveFavBtn.querySelector('i') : null;
+        if(icon) { icon.classList.add('animate-pop'); setTimeout(() => icon.classList.remove('animate-pop'), 300); }
+        
+        // クイック保存ボタンの見た目更新
+        const quickYes = document.getElementById('quickYesBtn');
+        if(quickYes) {
+            if (idx === -1) { // 保存された場合
+               quickYes.textContent = "保存しました✨";
+               quickYes.classList.add("bg-brand-600", "text-white");
+               quickYes.classList.remove("bg-brand-100", "text-brand-700");
+            } else { // 解除された場合
+               quickYes.textContent = "YES";
+               quickYes.classList.remove("bg-brand-600", "text-white");
+               quickYes.classList.add("bg-brand-100", "text-brand-700");
+            }
+        }
+    };
+
+    window.updateFavBtnState = function() {
+        const saveFavBtn = document.getElementById('saveFavBtn');
+        if(!state.currentResult || !saveFavBtn) return;
+        
+        const isFav = state.favorites.some(f => f.id === state.currentResult.id);
+        const icon = saveFavBtn.querySelector('i');
+        const text = saveFavBtn.querySelector('span');
+        
+        if(isFav) {
+            saveFavBtn.classList.add('bg-brand-5', 'text-brand-600', 'border-brand-200');
+            saveFavBtn.classList.remove('text-slate-600', 'dark:text-slate-300');
+            if(icon) icon.setAttribute('fill', 'currentColor');
+            if(text) text.textContent = "保存済";
+        } else {
+            saveFavBtn.classList.remove('bg-brand-50', 'text-brand-600', 'border-brand-200');
+            saveFavBtn.classList.add('text-slate-600', 'dark:text-slate-300');
+            if(icon) icon.setAttribute('fill', 'none');
+            if(text) text.textContent = "保存";
+        }
+        if(window.lucide) lucide.createIcons();
+    };
+
+    window.shareResult = async function() {
+        if(!state.currentResult) return;
+        const text = `【${state.currentResult.title}】への処方箋\n\n${state.currentResult.proverb}\n\n#Hitokoto`;
+        if (navigator.share) { try { await navigator.share({ title: 'Hitokoto 2.5', text: text, url: window.location.href }); } catch (err) {} }
+        else { navigator.clipboard.writeText(text).then(() => alert('コピーしました')); }
+    };
+
+    // 初期化処理
+    document.addEventListener("DOMContentLoaded", () => {
+        if(window.lucide) lucide.createIcons();
+        
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        // 描画更新
+        window.renderHistory();
+        window.renderFavorites();
+    });
+  </script>
+</body>
+</html>
