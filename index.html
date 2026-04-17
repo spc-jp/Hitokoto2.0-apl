@@ -257,7 +257,7 @@
                     <i data-lucide="sparkles" class="w-5 h-5 animate-pulse icon-normal"></i>
                     <span class="text-normal">処方箋を作成（Hitokoto）</span>
                     <span class="text-loading hidden flex items-center gap-2">
-                        <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> 処方箋を調合中...
+                        <i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> AIが処方箋を生成中...
                     </span>
                   </button>
                 </div>
@@ -631,6 +631,8 @@
 
     // 状態管理
     const MAX_FREE_USES = 3;
+    // ↓ CloudflareWorker の URL に変更してください
+    const WORKER_URL = 'https://hitokoto-worker.YOUR_SUBDOMAIN.workers.dev';
 
     let state = {
         history: JSON.parse(localStorage.getItem('hitokoto_history')) || [],
@@ -748,22 +750,66 @@
         textLoading.classList.remove('hidden');
         iconNormal.classList.add('hidden');
 
-        setTimeout(() => {
-            // 使用回数をカウントアップ
+        // ── Cloudflare Workers API 呼び出し ──────────────
+        (async () => {
+          try {
+            const res = await fetch(WORKER_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                level: levelVal,
+                behaviorId: behaviorVal,
+                behaviorTitle: qBehavior.options[qBehavior.selectedIndex].text,
+              }),
+            });
+
+            if (!res.ok) throw new Error('Worker error: ' + res.status);
+            const apiData = await res.json();
+            if (apiData.error) throw new Error(apiData.error);
+
+            // 使用回数カウントアップ（API成功後）
             state.uses++;
             localStorage.setItem('hitokoto_uses', state.uses);
             window.updateTrialBanner();
 
-            state.currentResult = { ...result, level: levelVal, timestamp: new Date().toISOString() };
+            // static配列の title/badge と APIレスポンスをマージ
+            state.currentResult = {
+              ...result,
+              level: levelVal,
+              timestamp: new Date().toISOString(),
+              proverb: apiData.proverb || result.proverb,
+              explain: apiData.explain || result.explain,
+              magic: Array.isArray(apiData.magic) && apiData.magic.length
+                       ? apiData.magic : result.magic,
+            };
+
             window.addToHistory(state.currentResult);
             window.populateResult(state.currentResult);
             window.openModal();
 
+          } catch (err) {
+            console.error('API Error:', err);
+            // フォールバック: static データで表示
+            state.uses++;
+            localStorage.setItem('hitokoto_uses', state.uses);
+            window.updateTrialBanner();
+
+            state.currentResult = {
+              ...result,
+              level: levelVal,
+              timestamp: new Date().toISOString(),
+            };
+            window.addToHistory(state.currentResult);
+            window.populateResult(state.currentResult);
+            window.openModal();
+
+          } finally {
             btn.disabled = false;
             textNormal.classList.remove('hidden');
             textLoading.classList.add('hidden');
             iconNormal.classList.remove('hidden');
-        }, 800);
+          }
+        })();
     };
 
     window.populateResult = function(data) {
