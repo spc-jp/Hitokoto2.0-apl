@@ -126,6 +126,22 @@
     <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-accent-400/30 dark:bg-accent-500/10 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
   </div>
 
+
+  <!-- 無料体験バナー -->
+  <div id="trialBanner" class="fixed top-16 w-full z-30 transition-all duration-300">
+    <!-- 未使用・残りあり: ゴールドバナー -->
+    <div id="bannerFree" class="hidden w-full bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-900 text-center text-xs font-bold py-2 px-4 shadow-sm flex items-center justify-center gap-2">
+      <span id="bannerFreeText">🎁 今なら3回まで無料でお試しいただけます（登録不要）</span>
+    </div>
+    <!-- 無料体験終了: 警告バナー -->
+    <div id="bannerEnd" class="hidden w-full bg-gradient-to-r from-red-500 to-rose-500 text-white text-center text-xs font-bold py-2 px-4 shadow-sm flex items-center justify-center gap-2 flex-wrap gap-y-1">
+      <span>⚠️ 無料体験が終了しました</span>
+      <a href="https://buy.stripe.com/YOUR_STRIPE_LINK" target="_blank" rel="noopener" class="underline bg-white/20 hover:bg-white/30 px-3 py-0.5 rounded-full transition whitespace-nowrap">
+        ご購入はこちら →
+      </a>
+    </div>
+  </div>
+
   <header class="fixed top-0 w-full z-40 glass shadow-sm transition-colors duration-300">
     <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
       <button onclick="switchTab('home')" class="flex items-center gap-3 hover:opacity-70 transition-opacity text-left group">
@@ -133,7 +149,6 @@
           <i data-lucide="wand-2" class="w-5 h-5"></i>
         </div>
         <div>
-          <!-- 変更: 2.5を削除 -->
           <h1 class="text-xl font-black tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-accent-500 dark:from-brand-400 dark:to-accent-400">
             Hitokoto
           </h1>
@@ -153,7 +168,7 @@
     </div>
   </header>
 
-  <main class="flex-grow pt-20 pb-24 overflow-y-auto overflow-x-hidden scroll-smooth" id="mainContainer">
+  <main class="flex-grow pt-28 pb-24 overflow-y-auto overflow-x-hidden scroll-smooth" id="mainContainer">
     <div class="max-w-md md:max-w-5xl mx-auto px-4 space-y-8 min-h-[80vh]">
       
       <section id="tab-home" class="tab-content block space-y-6 animate-fade-in">
@@ -231,7 +246,7 @@
                     <i data-lucide="alert-circle" class="w-3 h-3 inline mr-1"></i>症状を選んでください
                   </p>
                   <p class="text-xs text-slate-400 dark:text-slate-500 mt-1 ml-2 leading-tight">
-                    今いちばん気になっている“行動”を一つ選んでください。
+                    今いちばん気になっている"行動"を一つ選んでください。
                   </p>
                 </div>
 
@@ -264,7 +279,7 @@
               <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">このアプリについて</h4>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                 Hitokotoは、正解を出すアプリではありません。<br>
-                今の関係性で、いちばん摩擦の少ない<br>“次の一言”を見つけるための相棒です。
+                今の関係性で、いちばん摩擦の少ない<br>"次の一言"を見つけるための相棒です。
               </p>
             </div>
           </div>
@@ -370,7 +385,6 @@
             <i data-lucide="quote" class="w-6 h-6 text-white/50 mb-2"></i>
             <h2 id="resProverb" class="text-xl md:text-2xl font-black leading-tight mb-6 drop-shadow-md text-white"></h2>
             <div class="w-12 h-0.5 bg-white/30 rounded-full mb-6"></div>
-            <!-- 変更: 2.5を削除 -->
             <p class="text-xs font-medium opacity-80 uppercase tracking-widest">Hitokoto</p>
           </div>
         </div>
@@ -466,11 +480,11 @@
         proverb: "仕事を「終わらせる」のは作業者。「広げて返す」のがプロ。", 
         explain: "言われたことだけやるのは安心感がありますが、成長が止まります。「＋αの工夫」を評価軸に加え、意識をズラしましょう。", 
         magic: [
-          "「この仕事、言われた範囲に“あなたなりの工夫”を一つ足してみて？」", 
-          "「完了報告じゃなくて、“次に何をやるべきか”の提案までがセットだよ。」",
+          "「この仕事、言われた範囲に\"あなたなりの工夫\"を一つ足してみて？」",
+          "「完了報告じゃなくて、\"次に何をやるべきか\"の提案までがセットだよ。」",
           "「もし君がこのプロジェクトのリーダーなら、次にどう動く？」",
-          "「100点じゃなくていいから、“120点の仕事”にするなら何を加える？」",
-          "「作業が終わったね。じゃあ次は“価値”を生むフェーズに入ろうか。」"
+          "「100点じゃなくていいから、\"120点の仕事\"にするなら何を加える？」",
+          "「作業が終わったね。じゃあ次は\"価値\"を生むフェーズに入ろうか。」"
         ] 
       },
       { 
@@ -480,11 +494,11 @@
         proverb: "判断を預けるクセは、信頼とチャンスも手放している。", 
         explain: "失敗を恐れて「どっちがいいですか？」と聞きます。正解を教えるのではなく、「君の推しは？」と意思決定の練習をさせましょう。", 
         magic: [
-          "「まず、あなたの“ベスト案”を1つ決めてから相談してみよう。」", 
+          "「まず、あなたの\"ベスト案\"を1つ決めてから相談してみよう。」",
           "「今回は君の判断で決めていいよ。責任は私が持つから。」",
-          "「A案とB案、それぞれの“最悪のケース”を想定してみた？」",
-          "「“どっちでもいい”状況なら、君がワクワクする方を選んで。」",
-          "「失敗しても、それは“ナイスな実験データ”だから大丈夫だよ。」"
+          "「A案とB案、それぞれの\"最悪のケース\"を想定してみた？」",
+          "「\"どっちでもいい\"状況なら、君がワクワクする方を選んで。」",
+          "「失敗しても、それは\"ナイスな実験データ\"だから大丈夫だよ。」"
         ] 
       },
       { 
@@ -494,11 +508,11 @@
         proverb: "中堅の仕事は、自分で動くことより、人を動かす仕組みを作ること。", 
         explain: "真面目な人ほど一人で背負います。「頼ることは悪ではなく、チームの速度を上げる戦術だ」と伝えましょう。", 
         magic: [
-          "「君一人でやる前提じゃなく、“誰を使えば最速か”で考えてみて。」", 
+          "「君一人でやる前提じゃなく、\"誰を使えば最速か\"で考えてみて。」",
           "「後輩に任せられる部分を切り出すのも、大事な仕事だよ。」",
-          "「“自分がいないと回らない”は、組織にとってのリスクなんだ。」",
-          "「助けを求めることは、弱さじゃなくて“状況判断能力”だよ。」",
-          "「君の時間を、もっと“未来をつくる仕事”に使ってほしいんだ。」"
+          "「\"自分がいないと回らない\"は、組織にとってのリスクなんだ。」",
+          "「助けを求めることは、弱さじゃなくて\"状況判断能力\"だよ。」",
+          "「君の時間を、もっと\"未来をつくる仕事\"に使ってほしいんだ。」"
         ] 
       },
       { 
@@ -508,11 +522,11 @@
         proverb: "「現状維持」は、下りのエスカレーターに乗っているのと同じ。", 
         explain: "変化は痛みを伴います。「全て変える」のではなく「実験的に少し変える」とハードルを下げて提案させましょう。", 
         magic: [
-          "「『今まで通り』を一度忘れて、ゼロベースならどうする？」", 
+          "「『今まで通り』を一度忘れて、ゼロベースならどうする？」",
           "「失敗しても戻せるから、1週間だけこの新方式を試してみない？」",
           "「もしコストが無限にあったら、どう変えたい？」",
           "「変わらないリスクと、変わるリスク。どっちが大きいと思う？」",
-          "「完璧な変更じゃなくていい。“小さな実験”を始めよう。」"
+          "「完璧な変更じゃなくていい。\"小さな実験\"を始めよう。」"
         ] 
       },
       { 
@@ -522,11 +536,11 @@
         proverb: "相談は弱さではなく、ズレを補正する「測量」だ。", 
         explain: "相談しないのは「邪魔したくない」か「過信」です。こまめな相談が手戻りを防ぐと伝えましょう。", 
         magic: [
-          "「完璧な状態でなくていい。5分でいいから方向性だけ合わせよう。」", 
+          "「完璧な状態でなくていい。5分でいいから方向性だけ合わせよう。」",
           "「完成品より、作成途中の『骨組み』を見せてほしいな。」",
           "「迷ってなくても、節目で声をかけてくれるのが一番安心するよ。」",
           "「君の時間を無駄にしたくないから、早めにチェックさせて。」",
-          "「“報告”じゃなくて“作戦会議”だと思って、気軽に話しかけて。」"
+          "「\"報告\"じゃなくて\"作戦会議\"だと思って、気軽に話しかけて。」"
         ] 
       },
       { 
@@ -536,9 +550,9 @@
         proverb: "フィードバックは攻撃じゃない。一緒にレベルを上げる攻略本だ。", 
         explain: "黙るのは脳が防御態勢に入っているから。敵ではなく味方であることを強調し、心理的安全性を確保しましょう。", 
         magic: [
-          "「責めているわけじゃないよ。もっと良くするための作戦会議だ。」", 
+          "「責めているわけじゃないよ。もっと良くするための作戦会議だ。」",
           "「まず、君が今どう感じたか、一言だけ教えてくれる？」",
-          "「何が原因かより、“これからどうするか”にフォーカスしよう。」",
+          "「何が原因かより、\"これからどうするか\"にフォーカスしよう。」",
           "「言葉にならなくてもいいから、頷くだけでもしてくれる？」",
           "「僕も味方だから、一緒に解決策を探そう。」"
         ] 
@@ -550,7 +564,7 @@
         proverb: "報告が早い人は、仕事の「失敗」ではなく「選択肢」を増やしている。", 
         explain: "「早めのバッドニュースは評価する」というルールを明確にしないと改善しません。", 
         magic: [
-          "「解決してなくていい。状況だけ最速で教えてくれれば手は打てる。」", 
+          "「解決してなくていい。状況だけ最速で教えてくれれば手は打てる。」",
           "「困った時は、早く言った人の方が得をするルールだよ。」",
           "「怒らないから、事実だけを淡々と教えてほしい。」",
           "「火種は小さいうちに消した方が、君も楽になるよ。」",
@@ -564,7 +578,7 @@
         proverb: "評論家は客席、プレイヤーは舞台。君はどっちに立ちたい？", 
         explain: "批判は簡単ですが価値はありません。「代案なき批判は禁止」とし、実行する側に引きずり出しましょう。", 
         magic: [
-          "「鋭い視点だね。で、それを解決する『最初の一歩』は何だと思う？」", 
+          "「鋭い視点だね。で、それを解決する『最初の一歩』は何だと思う？」",
           "「その課題、君がリーダーなら誰を巻き込んでどう解決する？」",
           "「ダメな理由はわかった。じゃあ『どうすればできるか』を話そう。」",
           "「言うのは簡単だ。じゃあ、誰がやる？ 君がやる？」",
@@ -578,7 +592,7 @@
         proverb: "「忙しい」と言う人は時間に追われる側。優先順位を決める人が時間を支配する。", 
         explain: "タスクを可視化させ、捨てる勇気を持たせることが上司の役割です。", 
         magic: [
-          "「今日やること全部書き出して。その中で『本当に今やるべき3つ』はどれ？」", 
+          "「今日やること全部書き出して。その中で『本当に今やるべき3つ』はどれ？」",
           "「『やらないこと』を決めるのが戦略だよ。どれを捨てようか？」",
           "「忙しいのは頑張っている証拠だけど、成果に繋がっているかな？」",
           "「60点の出来でいいから、今日中に一度見せて。」",
@@ -592,7 +606,7 @@
         proverb: "70点のスピード提出は、100点の遅刻よりも価値がある。", 
         explain: "ビジネスにおける「品質」には「納期」も含まれることを徹底的に刷り込みます。", 
         magic: [
-          "「まずは30点の出来でいい。骨組みだけすぐ見せて。」", 
+          "「まずは30点の出来でいい。骨組みだけすぐ見せて。」",
           "「『完璧』を目指すより『最速』で出すなら、どこを削る？」",
           "「この仕事の合格ラインはここ。これ以上時間をかけるのは過剰品質だよ。」",
           "「走りながら考えよう。修正は後からいくらでもできる。」",
@@ -606,7 +620,7 @@
         proverb: "失敗は「行き止まり」ではなく、正解への「通過点」だ。", 
         explain: "失敗＝悪と思い込み、一歩が踏み出せません。「結果」ではなく「挑戦した事実」を評価し、心理的安全性を担保することが特効薬です。", 
         magic: [
-          "「失敗しても、それは『うまくいかない方法』を発見した成功だよ。」", 
+          "「失敗しても、それは『うまくいかない方法』を発見した成功だよ。」",
           "「もし失敗したら、一緒に謝りに行くから大丈夫。」",
           "「100点を目指さなくていい。まずは60点で『出したこと』を褒めたい。」",
           "「この件で一番のリスクは、失敗することじゃなくて『何も動かないこと』だね。」",
@@ -616,10 +630,13 @@
     ];
 
     // 状態管理
+    const MAX_FREE_USES = 3;
+
     let state = {
         history: JSON.parse(localStorage.getItem('hitokoto_history')) || [],
         favorites: JSON.parse(localStorage.getItem('hitokoto_favs')) || [],
-        currentResult: null
+        currentResult: null,
+        uses: parseInt(localStorage.getItem('hitokoto_uses') || '0', 10)
     };
     
     // 削除処理用の一時変数
@@ -658,7 +675,6 @@
         const tabs = document.querySelectorAll('.tab-content');
         
         navBtns.forEach(btn => {
-            const icon = btn.querySelector('[data-lucide]');
             if(btn.dataset.target === targetId) {
                 btn.classList.add('text-brand-600', 'dark:text-brand-400');
                 btn.classList.remove('text-slate-400', 'dark:text-slate-500');
@@ -683,7 +699,6 @@
           mainContainer.scrollTop = 0;
         }
         
-        // タブ切り替え時にアイコン再描画
         if(window.lucide) lucide.createIcons();
     };
 
@@ -695,11 +710,16 @@
     }
 
     window.runDiagnosis = function() {
+        // 使用回数チェック
+        if (state.uses >= MAX_FREE_USES) {
+            window.updateTrialBanner();
+            return;
+        }
+
         const qBehavior = document.getElementById('behavior');
         const errorMsg = document.getElementById('errorMsg');
         const behaviorVal = qBehavior ? qBehavior.value : null;
 
-        // バリデーション改善: alertではなくUIで表示
         if (!behaviorVal || behaviorVal === "") {
             if(qBehavior) {
                 qBehavior.classList.add('input-error');
@@ -707,7 +727,6 @@
             }
             if(errorMsg) errorMsg.classList.remove('hidden');
             
-            // 軽い振動フィードバック（モバイル向け）
             if (navigator.vibrate) navigator.vibrate(50);
             return;
         }
@@ -719,7 +738,6 @@
         const result = cases.find(c => c.id === behaviorVal);
         if (!result) return;
 
-        // ローディング演出
         const btn = document.getElementById('diagnoseBtn');
         const textNormal = btn.querySelector('.text-normal');
         const textLoading = btn.querySelector('.text-loading');
@@ -731,22 +749,24 @@
         iconNormal.classList.add('hidden');
 
         setTimeout(() => {
-            // 診断実行
+            // 使用回数をカウントアップ
+            state.uses++;
+            localStorage.setItem('hitokoto_uses', state.uses);
+            window.updateTrialBanner();
+
             state.currentResult = { ...result, level: levelVal, timestamp: new Date().toISOString() };
             window.addToHistory(state.currentResult);
             window.populateResult(state.currentResult);
             window.openModal();
 
-            // ボタンリセット
             btn.disabled = false;
             textNormal.classList.remove('hidden');
             textLoading.classList.add('hidden');
             iconNormal.classList.remove('hidden');
-        }, 800); // 0.8秒のタメ
+        }, 800);
     };
 
     window.populateResult = function(data) {
-        // レベルに応じたバッジとタイトル変更
         const badgeLabel = data.level === 'mid' ? 'LEADER TYPE' : 'ROOKIE TYPE';
         const explainTitle = data.level === 'mid' ? 'リーダー/中堅への処方箋' : '新人/若手への処方箋';
         
@@ -757,8 +777,6 @@
         
         const magicList = document.getElementById('resMagic');
         if(magicList) {
-          // 簡易ロジック: 中堅の場合は下3つ、新人の場合は上3つを表示するなど変化をつけることも可能だが
-          // 今回は全件表示しつつ、アイコンの色味を変えるなどの演出とする
           const iconColor = data.level === 'mid' ? 'text-accent-500' : 'text-brand-500';
           
           magicList.innerHTML = data.magic.map(m => `
@@ -777,7 +795,6 @@
         }
         
         if(window.lucide) {
-            // モーダル内のみ更新
             lucide.createIcons({
                 root: document.getElementById('resultPanel')
             });
@@ -792,12 +809,10 @@
         
         if(modal) {
           modal.classList.remove('hidden');
-          // 背景スクロール抑制
           document.body.classList.add('modal-open');
           
           setTimeout(() => { 
             if(backdrop) backdrop.classList.remove('opacity-0'); 
-            // 変更点: translateではなくscaleとopacityで表示
             if(panel) {
                 panel.classList.remove('scale-95', 'opacity-0');
                 panel.classList.add('scale-100', 'opacity-100');
@@ -812,20 +827,17 @@
         const panel = document.getElementById('resultPanel');
         
         if(backdrop) backdrop.classList.add('opacity-0'); 
-        // 変更点: translateではなくscaleとopacityで非表示
         if(panel) {
             panel.classList.remove('scale-100', 'opacity-100');
             panel.classList.add('scale-95', 'opacity-0');
         }
         
-        // 背景スクロール解除
         document.body.classList.remove('modal-open');
 
         setTimeout(() => modal && modal.classList.add('hidden'), 300);
     };
 
     window.addToHistory = function(item) {
-        // 重複排除ロジック改善: 同じIDかつ同じレベルなら削除して先頭へ
         const existingIdx = state.history.findIndex(h => h.id === item.id && h.level === item.level);
         if (existingIdx !== -1) {
              state.history.splice(existingIdx, 1);
@@ -858,7 +870,6 @@
             </div>
           `;
         } else {
-            // 空状態の改善
             html = `
                 <div class="text-center py-16 opacity-50 flex flex-col items-center gap-3 col-span-full">
                     <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-600">
@@ -881,7 +892,6 @@
             }
         }
         
-        // アイコン更新（特定エリアのみ）
         if(window.lucide && historyList) lucide.createIcons({ root: historyList });
         if(window.lucide && teaserList) lucide.createIcons({ root: teaserList });
     };
@@ -901,7 +911,6 @@
             </div>
           `;
         } else {
-            // 空状態の改善
             html = `
                 <div class="text-center py-16 opacity-50 flex flex-col items-center gap-3 col-span-full">
                     <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center text-slate-300 dark:text-slate-600">
@@ -920,7 +929,6 @@
     window.createItemHTML = function(item, idx, type) {
         const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString() : 'Now';
         const isTeaser = type === 'teaser';
-        // アイコン出し分け
         const levelIcon = item.level === 'mid' ? '🦅' : '🐣';
         const levelText = item.level === 'mid' ? '中堅' : '新人';
         
@@ -954,7 +962,6 @@
     window.openItem = function(id, level = 'new') {
         const item = cases.find(c => c.id === id);
         if(item) {
-            // 保存データの形式互換性のためlevelをマージ
             state.currentResult = { ...item, level: level };
             window.populateResult(state.currentResult);
             window.openModal();
@@ -1028,14 +1035,13 @@
         const icon = saveFavBtn ? saveFavBtn.querySelector('i') : null;
         if(icon) { icon.classList.add('animate-pop'); setTimeout(() => icon.classList.remove('animate-pop'), 300); }
         
-        // クイック保存ボタンの見た目更新
         const quickYes = document.getElementById('quickYesBtn');
         if(quickYes) {
-            if (idx === -1) { // 保存された場合
+            if (idx === -1) {
                quickYes.textContent = "保存しました✨";
                quickYes.classList.add("bg-brand-600", "text-white");
                quickYes.classList.remove("bg-brand-100", "text-brand-700");
-            } else { // 解除された場合
+            } else {
                quickYes.textContent = "YES";
                quickYes.classList.remove("bg-brand-600", "text-white");
                quickYes.classList.add("bg-brand-100", "text-brand-700");
@@ -1063,13 +1069,46 @@
             if(text) text.textContent = "保存";
         }
         
-        // ボタン内のアイコンだけ更新
         lucide.createIcons({ root: saveFavBtn });
+    };
+
+
+    window.updateTrialBanner = function() {
+        const bannerFree = document.getElementById('bannerFree');
+        const bannerFreeText = document.getElementById('bannerFreeText');
+        const bannerEnd = document.getElementById('bannerEnd');
+        const diagnoseBtn = document.getElementById('diagnoseBtn');
+        const remaining = MAX_FREE_USES - state.uses;
+
+        if (state.uses === 0) {
+            // 未使用
+            if(bannerFree) { bannerFree.classList.remove('hidden'); bannerFree.classList.add('flex'); }
+            if(bannerEnd) { bannerEnd.classList.add('hidden'); bannerEnd.classList.remove('flex'); }
+            if(bannerFreeText) bannerFreeText.textContent = '🎁 今なら3回まで無料でお試しいただけます（登録不要）';
+            if(diagnoseBtn) diagnoseBtn.disabled = false;
+        } else if (remaining > 0) {
+            // 残りあり
+            if(bannerFree) { bannerFree.classList.remove('hidden'); bannerFree.classList.add('flex'); }
+            if(bannerEnd) { bannerEnd.classList.add('hidden'); bannerEnd.classList.remove('flex'); }
+            if(bannerFreeText) bannerFreeText.textContent = `🎁 無料体験 残り${remaining}回（全${MAX_FREE_USES}回）`;
+            if(diagnoseBtn) diagnoseBtn.disabled = false;
+        } else {
+            // 終了
+            if(bannerFree) { bannerFree.classList.add('hidden'); bannerFree.classList.remove('flex'); }
+            if(bannerEnd) { bannerEnd.classList.remove('hidden'); bannerEnd.classList.add('flex'); }
+            // ボタンを無効化して購入を促す
+            if(diagnoseBtn) {
+                diagnoseBtn.disabled = true;
+                const textNormal = diagnoseBtn.querySelector('.text-normal');
+                if(textNormal) textNormal.textContent = '無料体験が終了しました';
+                diagnoseBtn.classList.remove('from-brand-600', 'to-accent-600', 'hover:from-brand-500', 'hover:to-accent-500');
+                diagnoseBtn.classList.add('from-slate-400', 'to-slate-500');
+            }
+        }
     };
 
     window.shareResult = async function() {
         if(!state.currentResult) return;
-        // 変更: 2.5を削除
         const text = `【${state.currentResult.title}】への処方箋\n\n${state.currentResult.proverb}\n\n#Hitokoto`;
         if (navigator.share) { try { await navigator.share({ title: 'Hitokoto', text: text, url: window.location.href }); } catch (err) {} }
         else { navigator.clipboard.writeText(text).then(() => alert('コピーしました')); }
@@ -1083,9 +1122,9 @@
             document.documentElement.classList.add('dark');
         }
         
-        // 描画更新
         window.renderHistory();
         window.renderFavorites();
+        window.updateTrialBanner();
     });
   </script>
 </body>
